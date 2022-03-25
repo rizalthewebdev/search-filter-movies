@@ -3,11 +3,33 @@
 @tailwind utilities;
 
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.title{
+  font-family: 'Prompt', sans-serif;
+}
+
+.subtitle{
+  font-family: 'Expletus Sans', cursive;
+}
+
+.desc{
+  font-family: 'Kanit', sans-serif;
+}
+
+@layer base {
+  body{
+    @apply bg-[#1B1B2F]
+  }
+}
+
+@layer components {
+  .glass{
+    @apply bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 bg-gray-100
+  }
+
+  .button-filter{
+    @apply py-1.5 px-6 rounded-md text-zinc-200 ring-zinc-500/75 hover:ring-1 
+  }
+  .active{
+    @apply bg-zinc-300 text-zinc-900
+  }
 }
