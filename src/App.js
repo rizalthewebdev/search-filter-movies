@@ -4,34 +4,73 @@ import Filter from "./components/Filter";
 import MovieCard from "./components/MovieCard";
 import Search from "./components/Search";
 import { motion, AnimatePresence } from "framer-motion";
+import Pagination from "./components/Pagination";
 
 const App = () => {
    const [search, setSearch] = useState("");
    const [searchResult, setSearchResult] = useState([]);
    const searchRef = useRef();
-   const [popular, setPopular] = useState([]);
+   const [discover, setDiscover] = useState([]);
    const [filtered, setFiltered] = useState([]);
-   const [genre, setGenre] = useState(0);
+   const [genres, setGenres] = useState([]);
+   const [activeGenre, setActiveGenre] = useState(0);
+   const [pageNumber, setPageNumber] = useState(1);
+   const [totalPage, setTotalPage] = useState(0);
 
-   const baseUrl = "https://api.themoviedb.org/3/movie";
-   const searchUrl = `https://api.themoviedb.org/3/search/movie`;
+   const baseUrl = "https://api.themoviedb.org/3";
 
+   // Initialize the discover movies
    useEffect(() => {
       axios
-         .get(`${baseUrl}/popular?api_key=${process.env.REACT_APP_API_KEY}`)
+         .get(
+            `${baseUrl}/discover/movie?api_key=${
+               process.env.REACT_APP_API_KEY
+            }${pageNumber > 1 ? `&page=${pageNumber}` : ""}`
+         )
          .then((res) => {
-            setPopular(res.data.results);
-            setFiltered(res.data.results);
+            setDiscover(res.data.results);
+            setTotalPage(res.data.total_pages);
          });
-   }, []);
+   }, [pageNumber, setTotalPage]);
 
+   // Get movies with specific genre
+   useEffect(() => {
+      axios
+         .get(
+            `${baseUrl}/discover/movie?api_key=${
+               process.env.REACT_APP_API_KEY
+            }${activeGenre === 0 ? "" : `&with_genres=${activeGenre}`}${
+               pageNumber > 1 ? `&page=${pageNumber}` : ""
+            }`
+         )
+         .then((res) => {
+            setFiltered(res.data.results);
+            setTotalPage(res.data.total_pages);
+         });
+   }, [activeGenre, pageNumber, setTotalPage]);
+
+   // get the data of all genre
+   useEffect(() => {
+      axios
+         .get(
+            `${baseUrl}/genre/movie/list?api_key=${process.env.REACT_APP_API_KEY}`
+         )
+         .then((res) => {
+            setGenres(res.data.genres);
+         });
+   }, [pageNumber, setTotalPage]);
+
+   // Get movies with search keyword
    const handleSearch = async () => {
       await axios
          .get(
-            `${searchUrl}?api_key=${process.env.REACT_APP_API_KEY}&query=${search}`
+            `${baseUrl}/search/movie?api_key=${
+               process.env.REACT_APP_API_KEY
+            }&query=${search}${pageNumber > 1 ? `&page=${pageNumber}` : ""}`
          )
          .then((res) => {
             setSearchResult(res.data.results);
+            setTotalPage(res.data.total_pages);
          });
    };
 
@@ -46,7 +85,9 @@ const App = () => {
          />
          {searchResult.length ? (
             <>
-            <h1 className="pb-5 subtitle font-bold tracking-wide text-zinc-200 text-xl">Result for : {search}</h1>
+               <h1 className="pb-5 subtitle font-bold tracking-wide text-zinc-200 text-xl">
+                  Result for : {search}
+               </h1>
                <motion.div
                   layout
                   className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4"
@@ -61,10 +102,11 @@ const App = () => {
          ) : (
             <>
                <Filter
-                  popular={popular}
+                  discover={discover}
                   setFiltered={setFiltered}
-                  genre={genre}
-                  setGenre={setGenre}
+                  activeGenre={activeGenre}
+                  setActiveGenre={setActiveGenre}
+                  genres={genres}
                />
                <motion.div
                   layout
@@ -78,6 +120,7 @@ const App = () => {
                </motion.div>
             </>
          )}
+         <Pagination totalPage={totalPage} setPageNumber={setPageNumber} />
       </main>
    );
 };
