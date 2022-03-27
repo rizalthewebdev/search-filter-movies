@@ -7,9 +7,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Pagination from "./components/Pagination";
 
 const App = () => {
+   const searchRef = useRef();
    const [search, setSearch] = useState("");
    const [searchResult, setSearchResult] = useState([]);
-   const searchRef = useRef();
    const [discover, setDiscover] = useState([]);
    const [filtered, setFiltered] = useState([]);
    const [genres, setGenres] = useState([]);
@@ -25,7 +25,7 @@ const App = () => {
          .get(
             `${baseUrl}/discover/movie?api_key=${
                process.env.REACT_APP_API_KEY
-            }${pageNumber > 1 ? `&page=${pageNumber}` : ""}`
+            }${`&page=${pageNumber}`}`
          )
          .then((res) => {
             setDiscover(res.data.results);
@@ -39,9 +39,9 @@ const App = () => {
          .get(
             `${baseUrl}/discover/movie?api_key=${
                process.env.REACT_APP_API_KEY
-            }${activeGenre === 0 ? "" : `&with_genres=${activeGenre}`}${
-               pageNumber > 1 ? `&page=${pageNumber}` : ""
-            }`
+            }${
+               activeGenre === 0 ? "" : `&with_genres=${activeGenre}`
+            }${`&page=${pageNumber}`}`
          )
          .then((res) => {
             setFiltered(res.data.results);
@@ -66,7 +66,7 @@ const App = () => {
          .get(
             `${baseUrl}/search/movie?api_key=${
                process.env.REACT_APP_API_KEY
-            }&query=${search}${pageNumber > 1 ? `&page=${pageNumber}` : ""}`
+            }&query=${search}${`&page=${pageNumber}`}`
          )
          .then((res) => {
             setSearchResult(res.data.results);
@@ -82,6 +82,7 @@ const App = () => {
             searchRef={searchRef}
             handleSearch={handleSearch}
             setSearchResult={setSearchResult}
+            setTotalPage={setTotalPage}
          />
          {searchResult.length ? (
             <>

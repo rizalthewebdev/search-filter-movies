@@ -17,7 +17,7 @@
 
 @layer base {
   body{
-    @apply bg-[#1B1B2F]
+    @apply bg-[#1B1B2F] overflow-y-auto
   }
 }
 
