@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
+import Credit from "./Credit";
 
 const Filter = ({ activeGenre, setActiveGenre, genres }) => {
    return (
@@ -7,7 +8,7 @@ const Filter = ({ activeGenre, setActiveGenre, genres }) => {
          initial={{ x: "-100vw" }}
          animate={{ x: 0 }}
          transition={{ delay: 0.25, type: "spring", stiffness: 75 }}
-         className="flex items-center gap-x-3 justify-start py-5 md:py-8"
+         className="flex items-center gap-x-3 justify-between py-5 md:py-8"
       >
          <select
             name="genres"
@@ -36,6 +37,7 @@ const Filter = ({ activeGenre, setActiveGenre, genres }) => {
                </option>
             ))}
          </select>
+         <Credit/>
       </motion.div>
    );
 };
