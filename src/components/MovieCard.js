@@ -9,7 +9,13 @@ const cardVariants = {
    },
 };
 
-const MovieCard = ({ movie }) => {
+const MovieCard = ({ movie, setShowModal, setMovieId }) => {
+
+   const settingModal = () => {
+      setMovieId(movie.id)
+      setShowModal(true)
+   }
+
    return (
       <>
          <motion.div
@@ -23,6 +29,7 @@ const MovieCard = ({ movie }) => {
                whileHover="hover"
                whileTap="hover"
                className="relative rounded-lg text-white text-sm md:text-[15px] text-center cursor-pointer transition-all duration-300"
+               onClick={settingModal}
             >
                <h2 className="absolute opacity-0 desc font-normal tracking-wider rounded-lg active:opacity-100 hover:opacity-100 flex items-center justify-center inset-0 bg-black/[0.65]">
                   {movie.title}

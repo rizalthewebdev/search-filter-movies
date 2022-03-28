@@ -25,6 +25,9 @@
   .glass{
     @apply bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 bg-gray-100
   }
+  .glass-modal{
+    @apply bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-20 bg-gray-200
+  }
 
   .button-filter{
     @apply py-1.5 px-6 rounded-md text-zinc-200 ring-zinc-500/75 hover:ring-1 

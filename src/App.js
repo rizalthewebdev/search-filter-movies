@@ -5,6 +5,7 @@ import MovieCard from "./components/MovieCard";
 import Search from "./components/Search";
 import { motion, AnimatePresence } from "framer-motion";
 import Pagination from "./components/Pagination";
+import Modal from "./components/Modal";
 
 const App = () => {
    const searchRef = useRef();
@@ -16,6 +17,8 @@ const App = () => {
    const [activeGenre, setActiveGenre] = useState(0);
    const [pageNumber, setPageNumber] = useState(1);
    const [totalPage, setTotalPage] = useState(0);
+   const [showModal, setShowModal] = useState(false);
+   const [movieId, setMovieId] = useState(508947)
 
    const baseUrl = "https://api.themoviedb.org/3";
 
@@ -76,6 +79,7 @@ const App = () => {
 
    return (
       <main className="mx-auto max-w-xs sm:max-w-md md:max-w-screen-sm lg:max-w-screen-lg">
+         <Modal showModal={showModal} setShowModal={setShowModal} movieId={movieId} />
          <Search
             search={search}
             setSearch={setSearch}
@@ -95,7 +99,7 @@ const App = () => {
                >
                   <AnimatePresence>
                      {searchResult?.map((movie) => (
-                        <MovieCard movie={movie} key={movie.id} />
+                        <MovieCard setShowModal={setShowModal} setMovieId={setMovieId} movie={movie} key={movie.id} />
                      ))}
                   </AnimatePresence>
                </motion.div>
@@ -115,7 +119,7 @@ const App = () => {
                >
                   <AnimatePresence>
                      {filtered.map((movie) => (
-                        <MovieCard movie={movie} key={movie.id} />
+                        <MovieCard setShowModal={setShowModal} setMovieId={setMovieId} movie={movie} key={movie.id} />
                      ))}
                   </AnimatePresence>
                </motion.div>
